@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction T&M Ticket Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Form Section -->
+            <div class="col-lg-8 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>Time & Materials Ticket Generator</h1>
+                    <div>
+                        <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#materialsModal">
+                            <i class="fas fa-database"></i> Edit Materials DB
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#equipmentModal">
+                            <i class="fas fa-database"></i> Edit Equipment DB
+                        </button>
+                    </div>
+                </div>
+
+                <form id="tmTicketForm">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="projectName" class="form-label">Project Name</label>
+                                <input type="text" class="form-control" id="projectName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="projectNumber" class="form-label">Project Number</label>
+                                <input type="text" class="form-control" id="projectNumber" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Location</label>
+                                <input type="text" class="form-control" id="location">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="contractor" class="form-label">Contractor</label>
+                                <input type="text" class="form-control" id="contractor" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="ticketDate" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="ticketDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="ticketNumber" class="form-label">Ticket Number</label>
+                                <input type="text" class="form-control" id="ticketNumber" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="workDescription" class="form-label">Work Description</label>
+                        <textarea class="form-control" id="workDescription" rows="3" required></textarea>
+                    </div>
+
+                    <!-- Labor Section -->
+                    <div class="section-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3><i class="fas fa-hard-hat me-2"></i> Labor</h3>
+                            <button type="button" class="btn btn-primary btn-sm" id="addLaborBtn">
+                                <i class="fas fa-plus"></i> Add Labor
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="laborContainer">
+                        <!-- Labor items will be added here -->
+                    </div>
+
+                    <!-- Materials Section -->
+                    <div class="section-header mt-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3><i class="fas fa-boxes me-2"></i> Materials</h3>
+                            <button type="button" class="btn btn-primary btn-sm" id="addMaterialBtn">
+                                <i class="fas fa-plus"></i> Add Material
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="materialsContainer">
+                        <!-- Material items will be added here -->
+                    </div>
+
+                    <!-- Equipment Section -->
+                    <div class="section-header mt-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3><i class="fas fa-truck me-2"></i> Equipment</h3>
+                            <button type="button" class="btn btn-primary btn-sm" id="addEquipmentBtn">
+                                <i class="fas fa-plus"></i> Add Equipment
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="equipmentContainer">
+                        <!-- Equipment items will be added here -->
+                    </div>
+
+                    <!-- Markup Options -->
+                    <div class="markup-options mt-4">
+                        <h3>Markup Options</h3>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="generalConditions">
+                                    <label class="form-check-label" for="generalConditions">
+                                        General Conditions (5%)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="insurance">
+                                    <label class="form-check-label" for="insurance">
+                                        Insurance (2%)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="overhead">
+                                    <label class="form-check-label" for="overhead">
+                                        Overhead (10%)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="fee">
+                                    <label class="form-check-label" for="fee">
+                                        Fee (5%)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <button type="button" class="btn btn-primary" id="previewBtn">Preview Ticket</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Preview Section -->
+            <div class="col-lg-4 bg-light p-4">
+                <h2 class="mb-4">Ticket Preview</h2>
+                <div id="previewPanel" class="preview-panel d-none">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 id="previewTitle">Time & Materials Ticket</h4>
+                        <span id="previewTicketNumber"></span>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>Project:</strong> <span id="previewProject"></span>
+                        </div>
+                        <div class="col-6">
+                            <strong>Date:</strong> <span id="previewDate"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>Contractor:</strong> <span id="previewContractor"></span>
+                        </div>
+                        <div class="col-6">
+                            <strong>Location:</strong> <span id="previewLocation"></span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Work Description:</strong>
+                        <p id="previewDescription"></p>
+                    </div>
+
+                    <h5>Labor</h5>
+                    <div id="previewLabor" class="mb-3"></div>
+
+                    <h5>Materials</h5>
+                    <div id="previewMaterials" class="mb-3"></div>
+
+                    <h5>Equipment</h5>
+                    <div id="previewEquipment" class="mb-3"></div>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <table class="table table-sm">
+                                <tr>
+                                    <td>Subtotal</td>
+                                    <td class="text-end" id="previewSubtotal">$0.00</td>
+                                </tr>
+                                <tr id="previewGeneralConditionsRow" class="d-none">
+                                    <td>General Conditions (5%)</td>
+                                    <td class="text-end" id="previewGeneralConditions">$0.00</td>
+                                </tr>
+                                <tr id="previewInsuranceRow" class="d-none">
+                                    <td>Insurance (2%)</td>
+                                    <td class="text-end" id="previewInsurance">$0.00</td>
+                                </tr>
+                                <tr id="previewOverheadRow" class="d-none">
+                                    <td>Overhead (10%)</td>
+                                    <td class="text-end" id="previewOverhead">$0.00</td>
+                                </tr>
+                                <tr id="previewFeeRow" class="d-none">
+                                    <td>Fee (5%)</td>
+                                    <td class="text-end" id="previewFee">$0.00</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total</strong></td>
+                                    <td class="text-end" id="previewTotal"><strong>$0.00</strong></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4 mb-3">
+                        <div class="col-6">
+                            <div>
+                                <strong>Prepared By:</strong>
+                            </div>
+                            <div id="signature-pad" class="signature-pad">
+                                <canvas id="signatureCanvas" width="300" height="100"></canvas>
+                            </div>
+                            <div class="mt-2">
+                                <button type="button" class="btn btn-sm btn-secondary" id="clearSignatureBtn">Clear</button>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div>
+                                <strong>Approved By:</strong>
+                            </div>
+                            <div id="approval-signature-pad" class="signature-pad">
+                                <canvas id="approvalSignatureCanvas" width="300" height="100"></canvas>
+                            </div>
+                            <div class="mt-2">
+                                <button type="button" class="btn btn-sm btn-secondary" id="clearApprovalSignatureBtn">Clear</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 justify-content-end mt-4">
+                        <button type="button" class="btn btn-success" id="emailBtn">
+                            <i class="fas fa-envelope"></i> Email
+                        </button>
+                        <button type="button" class="btn btn-primary" id="pdfBtn">
+                            <i class="fas fa-file-pdf"></i> Save as PDF
+                        </button>
+                        <button type="button" class="btn btn-info" id="printBtn">
+                            <i class="fas fa-print"></i> Print
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Materials Database Modal -->
+    <div class="modal fade" id="materialsModal" tabindex="-1" aria-labelledby="materialsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="materialsModalLabel">Edit Materials Database</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="newMaterialName" placeholder="Material Name">
+                            <input type="text" class="form-control" id="newMaterialUnit" placeholder="Unit (ea, ft, etc.)">
+                            <input type="number" class="form-control" id="newMaterialPrice" placeholder="Unit Price" step="0.01">
+                            <button class="btn btn-success" type="button" id="addMaterialToDbBtn">Add Material</button>
+                        </div>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>Unit</th>
+                                <th>Unit Price ($)</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="materialsDbTable">
+                            <!-- Materials database entries will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveMaterialsDbBtn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Equipment Database Modal -->
+    <div class="modal fade" id="equipmentModal" tabindex="-1" aria-labelledby="equipmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="equipmentModalLabel">Edit Equipment Database</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="newEquipmentName" placeholder="Equipment Name">
+                            <input type="text" class="form-control" id="newEquipmentUnit" placeholder="Unit (hour, day, etc.)">
+                            <input type="number" class="form-control" id="newEquipmentPrice" placeholder="Unit Price" step="0.01">
+                            <button class="btn btn-success" type="button" id="addEquipmentToDbBtn">Add Equipment</button>
+                        </div>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Equipment</th>
+                                <th>Unit</th>
+                                <th>Unit Price ($)</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="equipmentDbTable">
+                            <!-- Equipment database entries will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveEquipmentDbBtn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="emailModalLabel">Email T&M Ticket</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="emailTo" class="form-label">To:</label>
+                        <input type="email" class="form-control" id="emailTo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emailCc" class="form-label">CC:</label>
+                        <input type="email" class="form-control" id="emailCc">
+                    </div>
+                    <div class="mb-3">
+                        <label for="emailSubject" class="form-label">Subject:</label>
+                        <input type="text" class="form-control" id="emailSubject" value="Time & Materials Ticket">
+                    </div>
+                    <div class="mb-3">
+                        <label for="emailMessage" class="form-label">Message:</label>
+                        <textarea class="form-control" id="emailMessage" rows="3">Please find attached the Time & Materials Ticket for your review.</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="sendEmailBtn">Send Email</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/4.1.5/signature_pad.min.js"></script>
+    <!-- Use type="module" for ES6 module support -->
+    <script type="module" src="main.js"></script>
+</body>
+</html>

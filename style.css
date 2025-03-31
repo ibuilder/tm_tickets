@@ -1,0 +1,153 @@
+/* Custom styles for T&M Ticket Generator */
+
+.section-header {
+    background-color: #f8f9fa;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-left: 4px solid #0d6efd;
+}
+
+.item-row {
+    background-color: #f8f9fa;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.preview-panel {
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.signature-pad {
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    margin-top: 10px;
+    background-color: #fff;
+}
+
+.remove-btn {
+    color: #dc3545;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.remove-btn:hover {
+    color: #c82333;
+}
+
+#totalAmount {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.markup-options {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 15px 0;
+    border-left: 4px solid #198754;
+}
+
+/* Print styles */
+@media print {
+    .container-fluid {
+        width: 100%;
+    }
+    
+    .col-lg-8, .no-print {
+        display: none;
+    }
+    
+    .col-lg-4 {
+        width: 100%;
+    }
+    
+    .preview-panel {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    #emailBtn, #pdfBtn, #printBtn {
+        display: none;
+    }
+    
+    body {
+        font-size: 12pt;
+    }
+    
+    h1, h2, h3, h4, h5 {
+        page-break-after: avoid;
+    }
+    
+    table, figure {
+        page-break-inside: avoid;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .preview-panel {
+        margin-top: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .item-row .row [class*="col-"] {
+        margin-bottom: 10px;
+    }
+}
+
+/* Animations */
+.btn-primary {
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Form validation visual cues */
+.form-control:valid {
+    border-color: #198754;
+}
+
+.form-control:invalid {
+    border-color: #dc3545;
+}
+
+/* Custom tooltips */
+.custom-tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+}
+
+.custom-tooltip .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.custom-tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}

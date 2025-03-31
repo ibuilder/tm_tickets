@@ -1,0 +1,66 @@
+# Apache .htaccess file for T&M Ticket Generator
+# This file is only needed when hosting on Apache servers
+
+# Enable RewriteEngine for URL manipulation
+RewriteEngine On
+
+# Ensure proper MIME types are used
+AddType application/javascript .js
+AddType text/css .css
+
+# Set default character set
+AddDefaultCharset UTF-8
+
+# Enable caching for static assets
+<IfModule mod_expires.c>
+  ExpiresActive On
+  
+  # Cache CSS, JavaScript, and fonts for 1 week
+  ExpiresByType text/css "access plus 1 week"
+  ExpiresByType application/javascript "access plus 1 week"
+  ExpiresByType application/x-font-ttf "access plus 1 month"
+  ExpiresByType application/x-font-opentype "access plus 1 month"
+  ExpiresByType application/x-font-woff "access plus 1 month"
+  
+  # Cache images for 1 month
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/gif "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  
+  # HTML documents are re-validated on every access
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# Disable directory listing
+Options -Indexes
+
+# Enable compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+  # Prevent MIME type sniffing
+  Header set X-Content-Type-Options "nosniff"
+  
+  # Enable XSS protection
+  Header set X-XSS-Protection "1; mode=block"
+  
+  # Prevent clickjacking
+  Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# Redirect errors to custom pages
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html
+
+# Prevent access to sensitive files
+<FilesMatch "(\.gitignore|\.env|package\.json|package-lock\.json|node_modules)">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
